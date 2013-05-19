@@ -52,7 +52,7 @@
       beforeEach: empty,
       afterAll: empty,
       rename: empty,
-      error: function(err, file, i) {
+      error: function(err, file, i, status) {
         alert(err);
       },
       uploadStarted: empty,
@@ -81,7 +81,7 @@
     });
 
     function drop(e) {
-      opts.drop.call(this, e);
+      if( opts.drop.call(this, e) === false ) return false;
       files = e.dataTransfer.files;
       if (files === null || files === undefined || files.length === 0) {
         opts.error(errors[0]);
@@ -99,7 +99,7 @@
           builder = '';
 
       if (opts.data) {
-        var params = $.param(opts.data).split(/&/);
+        var params = $.param(opts.data).replace(/\+/g, '%20').split(/&/);
 
         $.each(params, function() {
           var pair = this.split("=", 2),
@@ -345,7 +345,13 @@
         upload.startData = 0;
         upload.addEventListener("progress", progress, false);
 
-        xhr.open("POST", opts.url, true);
+		// Allow url to be a method
+		if (jQuery.isFunction(opts.url)) {
+	        xhr.open("POST", opts.url(), true);
+	    } else {
+	    	xhr.open("POST", opts.url, true);
+	    }
+	    
         xhr.setRequestHeader('content-type', 'multipart/form-data; boundary=' + boundary);
 
         // Add headers
@@ -400,8 +406,8 @@
           
 
           // Pass any errors to the error option
-          if (xhr.status < 200 && xhr.status > 299) {
-            opts.error(xhr.statusText);
+          if (xhr.status < 200 || xhr.status > 299) {
+            opts.error(xhr.statusText, file, fileIndex, xhr.status);
           }
         };
       };
