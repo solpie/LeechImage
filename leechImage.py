@@ -1,9 +1,10 @@
 __author__ = 'SolPie'
-from bottle import Bottle, request, json_loads, static_file, jinja2_template as template
+from bottle import Bottle, request, redirect, json_loads, static_file, jinja2_template as template
 
 app = Bottle()
 UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
+IMAGE_PATH = 'uploads/images/'
 
 
 @app.route('/')
@@ -21,10 +22,18 @@ def static_files(filename):
 def upload():
     img = request.files['uploaded_file']
     f = img.file.file.read()
-    f2 = open(UPLOAD_FOLDER + img.filename, 'wb')
+    #todo check if name is same
+    #todo security filename
+    f2 = open(IMAGE_PATH + img.filename, 'wb')
     f2.write(f)
     f2.close()
     return ''
+
+
+@app.route('/img')
+def redirectImage():
+    return static_file('solpie.png', IMAGE_PATH)
+    # return redirect('http://img.solpie.net/?di=ZTZR')
 
 
 if __name__ == '__main__':
