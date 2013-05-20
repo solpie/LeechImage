@@ -1,5 +1,5 @@
 __author__ = 'SolPie'
-from bottle import Bottle, request, redirect, json_loads, static_file, jinja2_template as template
+from bottle import Bottle, request, redirect, static_file, jinja2_template as template
 
 app = Bottle()
 UPLOAD_FOLDER = 'uploads/'
