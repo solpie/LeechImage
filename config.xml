@@ -1,0 +1,9 @@
+<uwsgi>
+    <pythonpath>/home/s/Projects/LeechMVP</pythonpath>
+    <module>wsgi</module>
+    <callable>app</callable>
+    <socket>/tmp/uwsgi.sock</socket>
+    <master/>
+    <processes>4</processes>
+    <memory-report/>
+</uwsgi>

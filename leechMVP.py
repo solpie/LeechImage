@@ -21,7 +21,7 @@ def static_files(filename):
 @app.route('/upload', method='POST')
 def upload():
     img = request.files['uploaded_file']
-    f = img.file.file.read()
+    f = img.file.read()
     #todo check if name is same
     #todo security filename
     f2 = open(IMAGE_PATH + img.filename, 'wb')
