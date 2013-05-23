@@ -3,14 +3,12 @@ from bottle import (Bottle, request, static_file, jinja2_template as render_temp
 
 app = Bottle()
 
-from utils.bottleRedis import RedisPlugin
+# from utils.bottleRedis import RedisPlugin
+#
+# p = RedisPlugin(host='localhost')
+# app.install(p)
 
-p = RedisPlugin(host='localhost')
-app.install(p)
-
-from hashlib import md5
-import tempfile
-import os
+from utils.md5 import md5_bytes
 from utils.photos import walkImages
 
 UPLOAD_FOLDER = 'uploads/'
@@ -27,11 +25,18 @@ def create_db():
     return db
 
 
+_db = create_db()
+
+
 @app.route('/')
 def index():
     # for root, dirs, files in os.walk('uploads/images/'):
     #     walkImages(create_db(), files)
-    walkImages(create_db(), 'uploads/images/')
+    if _db:
+        pass
+    else:
+        db = create_db()
+        walkImages(db, 'uploads/images/')
     return render_template('templates/index')
 
 
@@ -42,26 +47,19 @@ def gallery():
 
 
 @app.route('/upload', method='POST')
-def upload(rdb):
+def upload():
     img = request.files['uploaded_file']
     chuck = img.file.read()
     # #todo check if name is same
     # #todo security filename
-    # f2 = open(IMAGE_PATH + img.filename, 'wb')
-    # f2.write(chuck)
-    # f2.close()
+    ##todo save file deco :set md5 ,close db
+    f2 = open(IMAGE_PATH + img.filename, 'wb')
+    f2.write(chuck)
+    f2.close()
+    # md5num = md5_bytes(chuck)
+    # db[md5num] = img.filename
     ###
-    tmp = tempfile.mkstemp()
-    md5_ = md5()
-    orig = file.name
-    f = os.fdopen(tmp[0], 'wb+')
-    # for chuck in file.chucks():
-    f.write(chuck)
-    md5_.update(chuck)
-    f.close()
-    md5sum = md5_.hexdigest()#'45307f2ed107d41180a9ca446c8fa1d0'
-    rdb.set(md5sum, IMAGE_PATH + img.filename)
-    return md5sum
+    return ''
 
 
 # @app.route('/img')
