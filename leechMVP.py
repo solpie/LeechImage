@@ -17,9 +17,23 @@ ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
 IMAGE_PATH = 'uploads/images/'
 
 
+def create_db():
+    import anydbm
+
+    db = anydbm.open('db', 'c')
+    for k, v in db.iteritems():
+        print k, '\t', v
+    return db
+
+
 @app.route('/')
 def index():
     return template('templates/index')
+
+
+@app.route('/gallery')
+def gallery():
+    return template('gallery')
 
 
 @app.get('/<filename:path>')
