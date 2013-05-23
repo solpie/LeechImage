@@ -4,6 +4,8 @@
     <title>gallery </title>
 </head>
 <body>
-
+{% for f in db %}
+    <img src="/img/{{ db[f] }}"/>
+{% endfor %}
 </body>
 </html>

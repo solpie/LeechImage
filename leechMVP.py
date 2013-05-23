@@ -1,5 +1,5 @@
 __author__ = 'SolPie'
-from bottle import (Bottle, request, static_file, jinja2_template as template)
+from bottle import (Bottle, request, static_file, jinja2_template as render_template)
 
 app = Bottle()
 
@@ -11,6 +11,7 @@ app.install(p)
 from hashlib import md5
 import tempfile
 import os
+from utils.photos import walkImages
 
 UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
@@ -28,18 +29,16 @@ def create_db():
 
 @app.route('/')
 def index():
-    return template('templates/index')
+    # for root, dirs, files in os.walk('uploads/images/'):
+    #     walkImages(create_db(), files)
+    walkImages(create_db(), 'uploads/images/')
+    return render_template('templates/index')
 
 
 @app.route('/gallery')
 def gallery():
-    return template('gallery')
-
-
-@app.get('/<filename:path>')
-def static_files(filename):
-    print filename
-    return static_file(filename, '.')
+    db = create_db()
+    return render_template('templates/gallery', db=db)
 
 
 @app.route('/upload', method='POST')
@@ -65,9 +64,11 @@ def upload(rdb):
     return md5sum
 
 
-@app.route('/img')
-def redirectImage():
-    return static_file('solpie.png', IMAGE_PATH)
+# @app.route('/img')
+@app.route('/img/<filename>')
+def redirectImage(filename):
+    return static_file(filename, IMAGE_PATH)
+    # return static_file('solpie.png', IMAGE_PATH)
     # return redirect('http://img.solpie.net/?di=ZTZR')
 
 
@@ -78,6 +79,12 @@ def redis(rdb):
         return row
     else:
         return 'hehe...'
+
+
+@app.get('/<filename:path>')
+def static_files(filename):
+    print filename
+    return static_file(filename, '.')
 
 
 if __name__ == '__main__':
