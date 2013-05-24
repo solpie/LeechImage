@@ -8,36 +8,47 @@ app = Bottle()
 # p = RedisPlugin(host='localhost')
 # app.install(p)
 
-from utils.md5 import md5_bytes
 from utils.photos import walkImages
 
 UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
 IMAGE_PATH = 'uploads/images/'
 
+import anydbm
+
 
 def create_db():
-    import anydbm
+    try:
+        db = anydbm.open('db', 'c')
+        for k, v in db.iteritems():
+            print k, '\t', v
+        return db
+    finally:
+        pass
+        # db.close()
 
-    db = anydbm.open('db', 'c')
-    for k, v in db.iteritems():
-        print k, '\t', v
-    return db
 
-
-_db = create_db()
+# _db = create_db()
 
 
 @app.route('/')
 def index():
     # for root, dirs, files in os.walk('uploads/images/'):
     #     walkImages(create_db(), files)
-    if _db:
-        pass
-    else:
-        db = create_db()
-        walkImages(db, 'uploads/images/')
+    # if _db:
+    #     pass
+    # else:
+    #     db = create_db()
+    #     walkImages(db, 'uploads/images/')
+    db = create_db()
+    walkImages(db, 'uploads/images/')
+    db.close()
     return render_template('templates/index')
+
+
+@app.route('/walk')
+def walk():
+    pass
 
 
 @app.route('/gallery')

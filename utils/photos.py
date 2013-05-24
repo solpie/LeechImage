@@ -1,6 +1,7 @@
 __author__ = 'SolPie'
 import hashlib
 import os
+import utils.short_url as short_url
 
 
 def walkImages(db, path):
@@ -11,7 +12,7 @@ def walkImages(db, path):
             md5.update(f.read())
             md5num = md5.hexdigest()
             db[md5num] = img_path
-            print md5num, img_path
+            print md5num, img_path, short_url.encode_url(md5num)
             f.close()
     db.close()
     pass
