@@ -8,12 +8,11 @@ app = Bottle()
 # p = RedisPlugin(host='localhost')
 # app.install(p)
 
-from utils.photos import walkImages
-
 UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
 IMAGE_PATH = 'uploads/images/'
 
+##dbm
 import anydbm
 
 
@@ -28,6 +27,20 @@ def create_db():
         # db.close()
 
 
+# def db_set(db):
+#     def deco(db)
+#
+#         return deco
+
+##
+from utils.dbm import DBM
+
+db = DBM()
+db.open('shelve')
+db.set('test', 'testing')
+db.sync()
+
+
 # _db = create_db()
 
 
@@ -40,9 +53,11 @@ def index():
     # else:
     #     db = create_db()
     #     walkImages(db, 'uploads/images/')
-    db = create_db()
-    walkImages(db, 'uploads/images/')
-    db.close()
+    # db = create_db()
+    # walkImages(db, 'uploads/images/')
+    # db.close()
+    db = DBM()
+    print '.....', db.get('test')
     return render_template('templates/index')
 
 
