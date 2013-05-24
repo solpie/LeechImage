@@ -2,6 +2,7 @@ __author__ = 'SolPie'
 from . import singleton
 import shelve
 
+
 @singleton
 class DBM():
     def __init__(self):
@@ -25,9 +26,17 @@ class DBM():
     def keys(self):
         return self.shelve.keys()
 
+    def values(self):
+        return self.shelve.values()
+
     def sync(self):
         if self.shelve:
             self.shelve.sync()
+
+    def del_value(self, value):
+        for k in self.shelve.keys():
+            if self.shelve.get(k) == value:
+                self.del_key(k)
 
     def close(self):
         if self.shelve:

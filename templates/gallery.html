@@ -1,11 +1,27 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>gallery </title>
-</head>
-<body>
-{% for f in db.keys() %}
-    <img src="/img/{{ db.get(f) }}"/>
-{% endfor %}
-</body>
-</html>
+{% extends 'base.html' %}
+{% block title %}
+    gallery
+{% endblock %}
+{% block body_content %}
+    <a href="/"><h1>home</h1></a>
+    <div id="dropbox">
+        <div class="preveiw">
+            {% for f in db.values() %}
+                <div class="preview img">
+                    <span class="imageHolder">
+                        <img src="/img/{{ f }}">
+                        <span class="uploaded">
+                        </span>
+                    </span>
+
+                    <div class="result">
+                        {{ f }} <a href="/del/img/{{ f }}">delete</a>
+                    </div>
+                </div>
+                {#                <span class="img">#}
+                {#                    <img src="/img/{{ db.get(f) }}"/>#}
+                {#                </span>#}
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

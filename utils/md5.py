@@ -4,7 +4,9 @@ import hashlib
 
 def md5_path(path):
     f = open(path, 'r')
-    return md5_bytes(f.read())
+    md5num = md5_bytes(f.read())
+    f.close()
+    return md5num
 
 
 def md5_bytes(b):

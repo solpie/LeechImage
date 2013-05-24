@@ -1,41 +1,32 @@
 __author__ = 'SolPie'
-from bottle import (Bottle, request, static_file, jinja2_template as render_template)
+import os
+from bottle import (Bottle, request, static_file,
+                    TEMPLATE_PATH, jinja2_template as render_template)
+from settings import *
+from datetime import datetime
 
 app = Bottle()
-
-# from utils.bottleRedis import RedisPlugin
-#
-# p = RedisPlugin(host='localhost')
-# app.install(p)
-
-UPLOAD_FOLDER = 'uploads/'
-ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
-IMAGE_PATH = 'uploads/images/'
-
+TEMPLATE_PATH.insert(0, TEMPLATES_PATH)
 ##dbm
-
-
 from utils.dbm import DBM
 from utils.photos import walkImages
+from utils.md5 import md5_bytes, md5_path
+
 db = DBM()
-db.open('shelve')
+db.open(DB_PATH)
 # d = {}
 # d['sf'] = 5
 # db.set('test', d)
 # db.sync()
 ##
-
 @app.route('/')
 def index():
-    db = DBM()
-    print '.....', db.get('test')
     return render_template('templates/index')
 
 
 @app.route('/walk')
 def walk():
-    walkImages(DBM(),IMAGE_PATH)
-    pass
+    walkImages(DBM(), PHOTOS_PATH)
 
 
 @app.route('/gallery')
@@ -49,21 +40,36 @@ def upload():
     chuck = img.file.read()
     # #todo check if name is same
     # #todo security filename
-    ##todo save file deco :set md5 ,close db
-    f2 = open(IMAGE_PATH + img.filename, 'wb')
+    f2 = open(PHOTOS_PATH + img.filename, 'wb')
     f2.write(chuck)
     f2.close()
-    # md5num = md5_bytes(chuck)
-    # db[md5num] = img.filename
-    ###
+    md5num = md5_bytes(chuck)
+    db.set(md5num, img.filename)
+    db.sync()
     return ''
 
 # @app.route('/img')
 @app.route('/img/<filename>')
 def redirectImage(filename):
-    return static_file(filename, IMAGE_PATH)
+    return static_file(filename, PHOTOS_PATH)
     # return static_file('solpie.png', IMAGE_PATH)
     # return redirect('http://img.solpie.net/?di=ZTZR')
+
+
+@app.route('/del/img/<filename>')
+def delete_file(filename):
+    old = PHOTOS_PATH + filename
+    now = datetime.now().strftime('%Y%b%a%H%M%S')
+    new = TRASH_PATH + now + '_' + filename
+    db.del_key(md5_path(old))
+    db.sync()
+    if os.path.isfile(old):
+        os.rename(old, new)
+        log = 'delete photos', filename
+        return log
+    else:
+        log = 'photos is not exists'
+        return log
 
 
 @app.route('/redis')
