@@ -11,8 +11,8 @@ def walkImages(db, path):
             md5 = hashlib.md5()
             md5.update(f.read())
             md5num = md5.hexdigest()
-            db[md5num] = img_path
-            print md5num, img_path, short_url.encode_url(md5num)
+            db.set(md5num, img_path)
+            # print md5num, img_path, short_url.encode_url(md5num)
             f.close()
-    db.close()
+    db.sync()
     pass

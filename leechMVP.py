@@ -13,49 +13,20 @@ ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']
 IMAGE_PATH = 'uploads/images/'
 
 ##dbm
-import anydbm
 
 
-def create_db():
-    try:
-        db = anydbm.open('db', 'c')
-        for k, v in db.iteritems():
-            print k, '\t', v
-        return db
-    finally:
-        pass
-        # db.close()
-
-
-# def db_set(db):
-#     def deco(db)
-#
-#         return deco
-
-##
 from utils.dbm import DBM
-
+from utils.photos import walkImages
 db = DBM()
 db.open('shelve')
-db.set('test', 'testing')
+d = {}
+d['sf'] = 5
+db.set('test', d)
 db.sync()
-
-
-# _db = create_db()
-
+##
 
 @app.route('/')
 def index():
-    # for root, dirs, files in os.walk('uploads/images/'):
-    #     walkImages(create_db(), files)
-    # if _db:
-    #     pass
-    # else:
-    #     db = create_db()
-    #     walkImages(db, 'uploads/images/')
-    # db = create_db()
-    # walkImages(db, 'uploads/images/')
-    # db.close()
     db = DBM()
     print '.....', db.get('test')
     return render_template('templates/index')
@@ -63,13 +34,13 @@ def index():
 
 @app.route('/walk')
 def walk():
+    walkImages(DBM(),IMAGE_PATH)
     pass
 
 
 @app.route('/gallery')
 def gallery():
-    db = create_db()
-    return render_template('templates/gallery', db=db)
+    return render_template('templates/gallery', db=DBM())
 
 
 @app.route('/upload', method='POST')
@@ -86,7 +57,6 @@ def upload():
     # db[md5num] = img.filename
     ###
     return ''
-
 
 # @app.route('/img')
 @app.route('/img/<filename>')

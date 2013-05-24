@@ -4,8 +4,8 @@
     <title>gallery </title>
 </head>
 <body>
-{% for f in db %}
-    <img src="/img/{{ db[f] }}"/>
+{% for f in db.keys() %}
+    <img src="/img/{{ db.get(f) }}"/>
 {% endfor %}
 </body>
 </html>
