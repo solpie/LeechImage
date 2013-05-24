@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block body_content %}
+    <ul>
+        {% for f in trash %}
+            <li>
+                {{ f }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

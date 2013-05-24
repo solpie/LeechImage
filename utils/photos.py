@@ -16,3 +16,12 @@ def walkImages(db, path):
             f.close()
     db.sync()
     pass
+
+
+def walkTrash(db, path):
+    l = []
+    for root, dirs, files in os.walk(path):
+        for filename in files:
+            l.append(filename)
+    db.set('trash', l)
+    return l

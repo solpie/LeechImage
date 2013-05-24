@@ -9,7 +9,7 @@ app = Bottle()
 TEMPLATE_PATH.insert(0, TEMPLATES_PATH)
 ##dbm
 from utils.dbm import DBM
-from utils.photos import walkImages
+from utils.photos import walkImages, walkTrash
 from utils.md5 import md5_bytes, md5_path
 
 db = DBM()
@@ -32,6 +32,12 @@ def walk():
 @app.route('/gallery')
 def gallery():
     return render_template('templates/gallery', db=DBM())
+
+
+@app.route('/trash')
+def trash():
+    t = walkTrash(db, TRASH_PATH)
+    return render_template('trash', trash=t)
 
 
 @app.route('/upload', method='POST')

@@ -5,7 +5,8 @@ import shelve
 
 @singleton
 class DBM():
-    def __init__(self):
+    def __init__(self, name=None):
+        # self.name = name
         pass
 
     def open(self, *arg):

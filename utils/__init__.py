@@ -7,6 +7,8 @@ def singleton(cls):
     def getInstance():
         if cls not in instances:
             instances[cls] = cls()
+        # if cls.name not in instances:
+        #     instances[cls.name] = cls()
         return instances[cls]
 
     return getInstance
