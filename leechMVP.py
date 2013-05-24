@@ -19,10 +19,10 @@ from utils.dbm import DBM
 from utils.photos import walkImages
 db = DBM()
 db.open('shelve')
-d = {}
-d['sf'] = 5
-db.set('test', d)
-db.sync()
+# d = {}
+# d['sf'] = 5
+# db.set('test', d)
+# db.sync()
 ##
 
 @app.route('/')
