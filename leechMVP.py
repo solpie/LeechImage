@@ -71,8 +71,8 @@ def reg(name):
 
 
 # @app.route('/img/<filename:re:[a-z]+.jpg>')
-@app.route('/img/<filename:re:.*\.png>#')
-# @app.route('/img/<filename>')
+# @app.route('/img/<filename:re:.*\.png>#')
+@app.route('/img/<filename>')
 def redirectImage(filename):
     # img = filename
     return static_file(filename, root=PHOTOS_PATH, mimetype='image/png')
