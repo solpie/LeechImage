@@ -1,5 +1,5 @@
 __author__ = 'SolPie'
-from . import singleton
+from utils import singleton
 import shelve
 
 

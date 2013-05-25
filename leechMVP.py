@@ -12,7 +12,7 @@ app = Bottle()
 TEMPLATE_PATH.insert(0, TEMPLATES_PATH)
 ##dbm
 from utils.dbm import DBM
-from utils.photos import Photo, walkImages, walkTrash
+from utils.photos import walkImages, walkTrash
 from utils.md5 import md5_bytes, md5_path
 
 db = DBM()
@@ -64,8 +64,16 @@ def upload():
     return ''
 
 
+@app.route('/reg/<name:re:[a-z]+.jpg>')
+def reg(name):
+    return name
+
+
+# @app.route('/img/<filename:re:[a-z]+.jpg>')
+# @app.route('/img/<filename:re:[a-z]+.png>')
 @app.route('/img/<filename>')
 def redirectImage(filename):
+    # img = filename
     return static_file(filename, PHOTOS_PATH)
     # return static_file('solpie.png', IMAGE_PATH)
     # return redirect('http://img.solpie.net/?di=ZTZR')
@@ -95,11 +103,19 @@ def redis(rdb):
     else:
         return 'hehe...'
 
-
 @app.get('/<filename:path>')
 def static_files(filename):
     print filename
     return static_file(filename, '.')
+
+
+@app.error(404)
+def error404():
+    return 'Nothing here,sorry'
+
+# @app.error(500)
+# def error500():
+#     return '500'
 
 
 if __name__ == '__main__':

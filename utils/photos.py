@@ -3,7 +3,7 @@ import hashlib
 import os
 
 
-class Photo():
+class Photo(object):
     md5num = None
     title = None
     slug = None
