@@ -1,21 +1,30 @@
 __author__ = 'SolPie'
 import os
+from datetime import datetime
+
 from bottle import (Bottle, request, static_file,
                     TEMPLATE_PATH, jinja2_template as render_template)
+
 from settings import *
-from datetime import datetime
+
 
 app = Bottle()
 TEMPLATE_PATH.insert(0, TEMPLATES_PATH)
 ##dbm
 from utils.dbm import DBM
-from utils.photos import walkImages, walkTrash
+from utils.photos import Photo, walkImages, walkTrash
 from utils.md5 import md5_bytes, md5_path
 
 db = DBM()
 db.open(DB_PATH)
-# d = {}
-# d['sf'] = 5
+p = db.get('test')
+# p.filename = 'file.jpg'
+# p.md5num = 'fe334edf'
+# p.path = 23
+# p.title = 'hello world'
+# db.set('test', p)
+db.sync()
+print db.get('test')
 # db.set('test', d)
 # db.sync()
 ##
@@ -54,7 +63,7 @@ def upload():
     db.sync()
     return ''
 
-# @app.route('/img')
+
 @app.route('/img/<filename>')
 def redirectImage(filename):
     return static_file(filename, PHOTOS_PATH)
