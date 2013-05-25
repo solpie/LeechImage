@@ -65,14 +65,18 @@ def upload():
     return ''
 
 
-@app.route('/reg/<name:re:[a-z]+.jpg>')
+# @app.route('/reg/<name:re:.*\.(png|jpg)>')
+photo_regex = '.*\.(%s)' % '|'.join(ALLOWED_EXTENSIONS)
+
+
+@app.route('/reg/<name:re:%s>' % photo_regex)
 def reg(name):
     return name
 
 
 # @app.route('/img/<filename:re:[a-z]+.jpg>')
 # @app.route('/img/<filename:re:.*\.png>#')
-@app.route('/img/<filename>')
+@app.route('/img/<filename:re:%s>' % photo_regex)
 def redirectImage(filename):
     # img = filename
     return static_file(filename, root=PHOTOS_PATH, mimetype='image/png')
@@ -112,7 +116,7 @@ def static_files(filename):
 
 
 @app.error(404)
-def error404():
+def error404(e):
     return 'Nothing here,sorry'
 
 # @app.error(500)
