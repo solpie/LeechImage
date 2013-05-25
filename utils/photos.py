@@ -18,7 +18,6 @@ class Photo(object):
 
 
 def walkImages(db, dir):
-    d = {}
     for root, dirs, files in os.walk(dir):
         for filename in files:
             p = Photo()
@@ -28,12 +27,11 @@ def walkImages(db, dir):
             md5 = hashlib.md5()
             md5.update(f.read())
             p.md5num = md5.hexdigest()
-            d[p.md5num] = p
+            db.set(p.md5num, p)
             # print md5num, img_path, short_url.encode_url(md5num)
             f.close()
-    db.set('photos', d)
     db.sync()
-    return d
+    return db
 
 
 def walkTrash(db, path):

@@ -11,22 +11,27 @@ from settings import *
 app = Bottle()
 TEMPLATE_PATH.insert(0, TEMPLATES_PATH)
 ##dbm
-from utils.dbm import DBM
+from utils.dbm import PhotoDBM, TrashDBM
 from utils.photos import walkImages, walkTrash
 from utils.md5 import md5_bytes, md5_path
 
-db = DBM()
+db = PhotoDBM()
 db.open(DB_PATH)
-p = db.get('test')
+# p = db.get('test')
 # p.filename = 'file.jpg'
 # p.md5num = 'fe334edf'
 # p.path = 23
 # p.title = 'hello world'
 # db.set('test', p)
-db.sync()
-print db.get('test')
+# db.sync()
+# print db.get('test')
 # db.set('test', d)
 # db.sync()
+
+trash_db = TrashDBM('trash')
+trash_db.set('trash', 'testing')
+print trash_db.get('trash')
+
 ##
 @app.route('/')
 def index():
@@ -35,18 +40,20 @@ def index():
 
 @app.route('/walk')
 def walk():
-    walkImages(DBM(), PHOTOS_PATH)
+    db.clear()
+    p = walkImages(PhotoDBM(), PHOTOS_PATH)
+    return render_template('walk', photos=p.values())
 
 
 @app.route('/gallery')
 def gallery():
-    photos = DBM().get('photos')
+    photos = PhotoDBM().values()
     return render_template('templates/gallery', photos=photos)
 
 
 @app.route('/trash')
 def trash():
-    t = walkTrash(db, TRASH_PATH)
+    t = walkTrash(trash_db, TRASH_PATH)
     return render_template('trash', trash=t)
 
 
@@ -89,6 +96,7 @@ def delete_file(filename):
     old = PHOTOS_PATH + filename
     now = datetime.now().strftime('%Y%b%a%H%M%S')
     new = TRASH_PATH + now + '_' + filename
+
     db.del_key(md5_path(old))
     db.sync()
     if os.path.isfile(old):

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block body_content %}
+    <ul>
+        {% for f in photos %}
+            <li>
+                {{ f.filename }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

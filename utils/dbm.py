@@ -1,12 +1,12 @@
 __author__ = 'SolPie'
-from utils import singleton
 import shelve
 
+from utils import table, singleton
 
-@singleton
-class DBM():
+
+class DBM(object):
     def __init__(self, name=None):
-        # self.name = name
+        self.name = name
         pass
 
     def open(self, *arg):
@@ -34,6 +34,9 @@ class DBM():
         if self.shelve:
             self.shelve.sync()
 
+    def clear(self):
+        self.shelve.clear()
+
     def del_value(self, value):
         for k in self.shelve.keys():
             if self.shelve.get(k) == value:
@@ -42,3 +45,18 @@ class DBM():
     def close(self):
         if self.shelve:
             self.shelve.close()
+
+
+@singleton
+class PhotoDBM(DBM):
+    def __init__(self):
+        pass
+
+
+@table
+class TrashDBM(DBM):
+    name = 'trash'
+
+    def __init__(self, name):
+        self.name = name
+        self.open('trash.dbm')
