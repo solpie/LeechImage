@@ -10,14 +10,16 @@ class Photo(object):
     path = None
     filename = None
 
-    def __init__(self):
+    def __init__(self, md5num=None, filename=None):
+        self.md5num = md5num
+        self.filename = filename
         pass
 
     def __str__(self):
         return '<Photo filename:%s md5:%s title:%s>' % (self.filename, self.md5num, self.title)
 
 
-def walkImages(db, dir):
+def walkPhotos(db, dir):
     for root, dirs, files in os.walk(dir):
         for filename in files:
             p = Photo()
@@ -32,6 +34,12 @@ def walkImages(db, dir):
             f.close()
     db.sync()
     return db
+
+
+def addPhoto(md5num, filename):
+    p = Photo(md5num,filename)
+
+    pass
 
 
 def walkTrash(db, path):

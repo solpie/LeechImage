@@ -12,7 +12,7 @@ app = Bottle()
 TEMPLATE_PATH.insert(0, TEMPLATES_PATH)
 ##dbm
 from utils.dbm import PhotoDBM, TrashDBM
-from utils.photos import walkImages, walkTrash
+from utils.photos import walkPhotos, walkTrash, addPhoto,Photo
 from utils.md5 import md5_bytes, md5_path
 
 db = PhotoDBM()
@@ -41,7 +41,7 @@ def index():
 @app.route('/walk')
 def walk():
     db.clear()
-    p = walkImages(PhotoDBM(), PHOTOS_PATH)
+    p = walkPhotos(PhotoDBM(), PHOTOS_PATH)
     return render_template('walk', photos=p.values())
 
 
@@ -67,7 +67,9 @@ def upload():
     f2.write(chuck)
     f2.close()
     md5num = md5_bytes(chuck)
-    db.set(md5num, img.filename)
+
+    p = Photo(md5num, img.filename)
+    db.set(md5num, p)
     db.sync()
     return ''
 
