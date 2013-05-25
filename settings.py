@@ -4,6 +4,7 @@ DB_ENGINE = 'shelve'
 DB_PATH = 'shelve.db'
 
 TEMPLATES_PATH = 'templates'
+STATIC_PATH = 'static/'
 
 UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']

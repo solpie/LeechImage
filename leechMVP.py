@@ -10,11 +10,18 @@ from settings import *
 
 app = Bottle()
 TEMPLATE_PATH.insert(0, TEMPLATES_PATH)
-##dbm
-from utils.dbm import PhotoDBM, TrashDBM
-from utils.photos import walkPhotos, walkTrash, addPhoto,Photo
-from utils.md5 import md5_bytes, md5_path
 
+from utils.dbm import PhotoDBM, TrashDBM
+from utils.photos import walkPhotos, walkTrash, addPhoto, Photo
+from utils.md5 import md5_bytes, md5_path
+## slash test
+# from utils.bottleEx import StripPathMiddleware
+#
+# app = app()
+# appEx = StripPathMiddleware(app=app)
+##
+
+##dbm test
 db = PhotoDBM()
 db.open(DB_PATH)
 # p = db.get('test')
@@ -27,12 +34,13 @@ db.open(DB_PATH)
 # print db.get('test')
 # db.set('test', d)
 # db.sync()
-
+##
 trash_db = TrashDBM('trash')
 trash_db.set('trash', 'testing')
 print trash_db.get('trash')
-
 ##
+
+
 @app.route('/')
 def index():
     return render_template('templates/index')
@@ -85,15 +93,16 @@ def reg(name):
 
 # @app.route('/img/<filename:re:[a-z]+.jpg>')
 # @app.route('/img/<filename:re:.*\.png>#')
-@app.route('/img/<filename:re:%s>' % photo_regex)
+@app.route('/photo/<filename:re:%s>' % photo_regex)
 def redirectImage(filename):
+    #todo decode time from blog
     # img = filename
     return static_file(filename, root=PHOTOS_PATH, mimetype='image/png')
     # return static_file('solpie.png', IMAGE_PATH)
     # return redirect('http://img.solpie.net/?di=ZTZR')
 
 
-@app.route('/del/img/<filename>')
+@app.route('/del/photo/<filename>')
 def delete_file(filename):
     old = PHOTOS_PATH + filename
     now = datetime.now().strftime('%Y%b%a%H%M%S')
@@ -110,19 +119,28 @@ def delete_file(filename):
         return log
 
 
-@app.route('/redis')
-def redis(rdb):
-    row = rdb.get('45307f2ed107d41180a9ca446c8fa1d0')
-    if row:
-        return row
-    else:
-        return 'hehe...'
+# @app.route('/redis')
+# def redis(rdb):
+#     row = rdb.get('45307f2ed107d41180a9ca446c8fa1d0')
+#     if row:
+#         return row
+#     else:
+#         return 'hehe...'
 
 
-@app.get('/<filename:path>')
-def static_files(filename):
-    print filename
-    return static_file(filename, '.')
+@app.get('/js/<filename:re:.*\.js>')
+def static_js(filename):
+    return static_file(filename, root=STATIC_PATH + 'js/')
+
+
+@app.get('/css/<filename:re:.*\.css>')
+def static_css(filename):
+    return static_file(filename, root=STATIC_PATH + 'css/')
+
+
+@app.get('/img/<filename:re:.*\.(png|jpg)>')
+def static_css(filename):
+    return static_file(filename, root=STATIC_PATH + 'img/')
 
 
 @app.error(404)
@@ -135,4 +153,5 @@ def error404(e):
 
 
 if __name__ == '__main__':
+    # run(app=appEx, debug=True, reloader=True)
     app.run(debug=True, reloader=True)
