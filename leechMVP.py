@@ -40,7 +40,8 @@ def walk():
 
 @app.route('/gallery')
 def gallery():
-    return render_template('templates/gallery', db=DBM())
+    photos = DBM().get('photos')
+    return render_template('templates/gallery', photos=photos)
 
 
 @app.route('/trash')
@@ -70,11 +71,11 @@ def reg(name):
 
 
 # @app.route('/img/<filename:re:[a-z]+.jpg>')
-# @app.route('/img/<filename:re:[a-z]+.png>')
-@app.route('/img/<filename>')
+@app.route('/img/<filename:re:.*\.png>#')
+# @app.route('/img/<filename>')
 def redirectImage(filename):
     # img = filename
-    return static_file(filename, PHOTOS_PATH)
+    return static_file(filename, root=PHOTOS_PATH, mimetype='image/png')
     # return static_file('solpie.png', IMAGE_PATH)
     # return redirect('http://img.solpie.net/?di=ZTZR')
 
@@ -102,6 +103,7 @@ def redis(rdb):
         return row
     else:
         return 'hehe...'
+
 
 @app.get('/<filename:path>')
 def static_files(filename):
