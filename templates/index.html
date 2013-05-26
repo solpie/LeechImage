@@ -5,13 +5,29 @@
     {% block header %}
     {% endblock %}
     <div class="result">
-    <h2><a href="/gallery">Gallery View</a> <a href="/walk">Walk Photos</a> <a href="/trash">Trash View</a></h2>
+        <h2><a href="/gallery">Gallery View</a> <a href="/walk">Walk Photos</a> <a href="/trash">Trash View</a></h2>
     </div>
     <div id="dropbox">
         <span class="message">Drag images here!</span>
     </div>
+
+    <form id="upload" action="/" method="POST" enctype="multipart/form-data" target="ifm">
+        <fieldset>
+            <legend>File Upload:</legend>
+            <!--<input type="hidden" id="MAX_FILE_SIZE" name="MAX_FILE_SIZE" value="300000" />-->
+            <div>
+                <!--<label for="fileselect">Files to upload:</label>-->
+                <input type="file" id="fileselect" name="file" / title="choose a file"
+                onchange="this.form.submit();">
+                <div id="filedrag">or drop the file here</div>
+            </div>
+        </fieldset>
+    </form>
+    <div id="upload_progress" class="progress progress-striped active" style="display:none">
+        <div id="upload_progress_bar" class="bar"></div>
+    </div>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-    <script src="/js/jquery.filedrop.js"></script>
-    <script src="/js/script.js"></script>
+    <script src="/jquery.filedrop.js"></script>
+    <script src="/script.js"></script>
 {% endblock %}
 

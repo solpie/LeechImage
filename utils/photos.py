@@ -9,6 +9,8 @@ class Photo(object):
     slug = None
     path = None
     filename = None
+    size = None
+    resolution = None
 
     def __init__(self, md5num=None, filename=None):
         self.md5num = md5num
@@ -38,7 +40,6 @@ def walkPhotos(db, dir):
 
 def addPhoto(md5num, filename):
     p = Photo(md5num,filename)
-
     pass
 
 

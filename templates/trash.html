@@ -1,10 +1,42 @@
 {% extends 'base.html' %}
 {% block body_content %}
-    <ul>
-        {% for f in trash %}
-            <li>
-                {{ f }}
-            </li>
-        {% endfor %}
-    </ul>
+    <!--file list-->
+    <div class="container">
+        <div class="row-fluid"  id="trash">
+            <table class="table table-hover menu">
+                <thead>
+                <tr bgcolor="#333333">
+                    <td><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name</font></td>
+                    <td width="80"><font color="white">Size</font></td>
+                    <td width="150"><font color="white">Time</font></td>
+                    <td width="45"><font color="white">Action</font></td>
+                </tr>
+                </thead>
+                <tbody id="dir_table">
+                {% for f in trash %}
+                    <tr>
+                        <td>
+                            {{ f }}
+                        </td>
+                        <td>
+                        </td>
+                        <td>time</td>
+                        <td>
+                            <a title="Delete" name=" {{ f }}" href="#">del</a>
+                            {#                        <a title="Delete" name=" {{ f }}"  href="#"><img src="/static/img/bin.png"/></a>#}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <!--file list-->
+    {#    <ul>#}
+    {#        {% for f in trash %}#}
+    {#            <li>#}
+    {#                {{ f }}#}
+    {#            </li>#}
+    {#        {% endfor %}#}
+    {#    </ul>#}
 {% endblock %}

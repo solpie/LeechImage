@@ -59,4 +59,4 @@ class TrashDBM(DBM):
 
     def __init__(self, name):
         self.name = name
-        self.open('trash.dbm')
+        self.open(name)

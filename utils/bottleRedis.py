@@ -38,3 +38,15 @@ class RedisPlugin(object):
 
 
 Plugin = RedisPlugin
+
+
+
+## usage
+# @app.route('/redis')
+# def redis(rdb):
+#     row = rdb.get('45307f2ed107d41180a9ca446c8fa1d0')
+#     if row:
+#         return row
+#     else:
+#         return 'hehe...'
+

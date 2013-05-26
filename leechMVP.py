@@ -35,14 +35,15 @@ db.open(DB_PATH)
 # db.set('test', d)
 # db.sync()
 ##
-trash_db = TrashDBM('trash')
-trash_db.set('trash', 'testing')
-print trash_db.get('trash')
+trash_db = TrashDBM(DBM_TRASH)
+# trash_db.set('trash', 'testing')
+# print trash_db.get('trash')
 ##
 
 
 @app.route('/')
 def index():
+    h = request.get_header('Referer')
     return render_template('templates/index')
 
 
@@ -119,28 +120,23 @@ def delete_file(filename):
         return log
 
 
-# @app.route('/redis')
-# def redis(rdb):
-#     row = rdb.get('45307f2ed107d41180a9ca446c8fa1d0')
-#     if row:
-#         return row
-#     else:
-#         return 'hehe...'
 
 
-@app.get('/js/<filename:re:.*\.js>')
+@app.get('/<filename:re:.*\.js>')
 def static_js(filename):
-    return static_file(filename, root=STATIC_PATH + 'js/')
+    return static_file(filename, root=STATIC_PATH + 'js')
 
 
-@app.get('/css/<filename:re:.*\.css>')
+@app.get('/<filename:re:.*\.css>')
 def static_css(filename):
-    return static_file(filename, root=STATIC_PATH + 'css/')
+    #todo allow referer
+    h = request.get_header('Referer')
+    return static_file(filename, root=STATIC_PATH + 'css')
 
 
 @app.get('/img/<filename:re:.*\.(png|jpg)>')
 def static_css(filename):
-    return static_file(filename, root=STATIC_PATH + 'img/')
+    return static_file(filename, root=STATIC_PATH + 'img')
 
 
 @app.error(404)
