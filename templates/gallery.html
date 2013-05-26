@@ -9,13 +9,12 @@
             {% for f in photos %}
                 <div class="preview img">
                     <span class="imageHolder">
-                        <img src="/photo/{{ f.filename }}">
+                        <img src="/p/{{ f.filename }}">
                         <span class="uploaded">
                         </span>
                     </span>
-
                     <div class="result">
-                        {{ f.filename }} <a href="/del/photo/{{ f.filename }}">delete</a>
+                         {{ f.filename }}<a title="Delete" href="/del/p/{{ f.filename }}"><img src="/img/trash.png" /></a>
                     </div>
                 </div>
                 {#                <span class="img">#}

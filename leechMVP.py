@@ -94,7 +94,7 @@ def reg(name):
 
 # @app.route('/img/<filename:re:[a-z]+.jpg>')
 # @app.route('/img/<filename:re:.*\.png>#')
-@app.route('/photo/<filename:re:%s>' % photo_regex)
+@app.route('/p/<filename:re:%s>' % photo_regex)
 def redirectImage(filename):
     #todo decode time from blog
     # img = filename
@@ -103,7 +103,7 @@ def redirectImage(filename):
     # return redirect('http://img.solpie.net/?di=ZTZR')
 
 
-@app.route('/del/photo/<filename>')
+@app.route('/del/p/<filename>')
 def delete_file(filename):
     old = PHOTOS_PATH + filename
     now = datetime.now().strftime('%Y%b%a%H%M%S')
@@ -118,8 +118,6 @@ def delete_file(filename):
     else:
         log = 'photos is not exists'
         return log
-
-
 
 
 @app.get('/<filename:re:.*\.js>')

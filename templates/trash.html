@@ -2,13 +2,13 @@
 {% block body_content %}
     <!--file list-->
     <div class="container">
-        <div class="row-fluid"  id="trash">
+        <div class="row-fluid" id="trash">
             <table class="table table-hover menu">
                 <thead>
                 <tr bgcolor="#333333">
-                    <td><font color="white">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Name</font></td>
+                    <td><font color="white">Name</font></td>
                     <td width="80"><font color="white">Size</font></td>
-                    <td width="150"><font color="white">Time</font></td>
+                    <td width="150"><font color="white">Date</font></td>
                     <td width="45"><font color="white">Action</font></td>
                 </tr>
                 </thead>
@@ -22,14 +22,16 @@
                         </td>
                         <td>time</td>
                         <td>
-                            <a title="Delete" name=" {{ f }}" href="#">del</a>
-                            {#                        <a title="Delete" name=" {{ f }}"  href="#"><img src="/static/img/bin.png"/></a>#}
+                            {#                            <a title="Delete" name=" {{ f }}" href="#">del</a>#}
+                            <a title="Delete" name=" {{ f }}" href="#"><img src="/img/trash.png"/></a>
                         </td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+
         </div>
+        {#     <input type="button" name="empty"/>#}
     </div>
     <!--file list-->
     {#    <ul>#}
