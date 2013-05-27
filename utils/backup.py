@@ -19,7 +19,7 @@ def zip_dir(dirname, zipfilename):
         zf.write(tar, arcname)
     zf.close()
 
-
+#todo email backup.zip
 def zip_db_photos(uploads_path, db_path, zipfilename):
     filelist = []
     if os.path.isfile(uploads_path):
@@ -38,6 +38,23 @@ def zip_db_photos(uploads_path, db_path, zipfilename):
     return zipfilename
 
 
+def zip_path(root_path, zipfilename):
+    if os.path.isfile(zipfilename):
+        os.remove(zipfilename)
+    filelist = []
+    if os.path.isfile(root_path):
+        filelist.append(root_path)
+    else:
+        for root, dirs, files in os.walk(root_path):
+            for name in files:
+                filelist.append(os.path.join(root, name))
+    zf = zipfile.ZipFile(zipfilename, "w", zipfile.zlib.DEFLATED)
+    for tar in filelist:
+        zf.write(tar, tar)
+    zf.close()
+    return zipfilename
+
+
 def unzip_file(zipfilename, unziptodir):
     if not os.path.exists(unziptodir): os.mkdir(unziptodir, 0777)
     zfobj = zipfile.ZipFile(zipfilename)
@@ -47,6 +64,7 @@ def unzip_file(zipfilename, unziptodir):
         if name.endswith('/'):
             os.mkdir(os.path.join(unziptodir, name))
         else:
+
             ext_filename = os.path.join(unziptodir, name)
             ext_dir = os.path.dirname(ext_filename)
             if not os.path.exists(ext_dir): os.mkdir(ext_dir, 0777)

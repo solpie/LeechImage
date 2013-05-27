@@ -65,13 +65,16 @@ def trash():
     return render_template('trash', trash=t)
 
 
-from utils.backup import zip_db_photos
+from utils.backup import zip_db_photos, zip_path
 
 
-@app.route('/dl/<db>')
-def download(db):
-    if db == 'shelve.db':
+@app.route('/dl/<backup>')
+def download(backup):
+    if backup == 'db':
         filename = zip_db_photos(UPLOAD_FOLDER, DB_PATH, 'dl/backup.zip')
+        return static_file(filename=filename, root='.', download=True)
+    if backup == 'all':
+        filename = zip_path('.', 'dl/backup2.zip')
         return static_file(filename=filename, root='.', download=True)
         # return static_file('shelve.db', root='db', download=True)
     return ''
