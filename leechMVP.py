@@ -2,7 +2,7 @@ __author__ = 'SolPie'
 import os
 from datetime import datetime
 
-from bottle import (Bottle, request, static_file, TEMPLATE_PATH, jinja2_template as render_template)
+from bottle import (Bottle, request, redirect,static_file, TEMPLATE_PATH, jinja2_template as render_template)
 
 from settings import *
 
@@ -112,7 +112,7 @@ from utils.music import leech5sing
 @app.route('/m/<category>/<songID:int>')
 def leechMusic(category, songID):
     mp3url = leech5sing(category, songID)
-    return static_file(filename=mp3url, download=True)
+    return redirect(mp3url)
 
 # @app.route('/img/<filename:re:[a-z]+.jpg>')
 # @app.route('/img/<filename:re:.*\.png>#')
