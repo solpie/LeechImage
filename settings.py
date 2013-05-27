@@ -7,7 +7,7 @@ DBM_TRASH = 'db/trash.dbm'
 TEMPLATES_PATH = 'templates'
 STATIC_PATH = 'static/'
 
-ALLOWED_REFERER = ['http://localhost:8080', 'http://solpie.net']
+ALLOWED_REFERER = ['http://localhost:8080', 'http://www.solpie.net', '^http://(.)+\.solpie\.net']
 
 UPLOAD_FOLDER = 'uploads/'
 ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg', 'gif']

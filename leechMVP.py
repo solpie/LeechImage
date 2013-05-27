@@ -2,8 +2,7 @@ __author__ = 'SolPie'
 import os
 from datetime import datetime
 
-from bottle import (Bottle, request, static_file,
-                    TEMPLATE_PATH, jinja2_template as render_template)
+from bottle import (Bottle, request, static_file, TEMPLATE_PATH, jinja2_template as render_template)
 
 from settings import *
 
@@ -12,7 +11,7 @@ app = Bottle()
 TEMPLATE_PATH.insert(0, TEMPLATES_PATH)
 
 from utils.dbm import PhotoDBM, TrashDBM
-from utils.photos import walkPhotos, walkTrash, addPhoto, Photo
+from utils.photos import walkPhotos, walkTrash, Photo
 from utils.md5 import md5_bytes, md5_path
 ## slash test
 # from utils.bottleEx import StripPathMiddleware
@@ -64,6 +63,18 @@ def gallery():
 def trash():
     t = walkTrash(trash_db, TRASH_PATH)
     return render_template('trash', trash=t)
+
+
+from utils.backup import zip_db_photos
+
+
+@app.route('/dl/<db>')
+def download(db):
+    if db == 'shelve.db':
+        filename = zip_db_photos(UPLOAD_FOLDER, DB_PATH, 'dl/backup.zip')
+        return static_file(filename=filename, root='.', download=True)
+        # return static_file('shelve.db', root='db', download=True)
+    return ''
 
 
 @app.route('/upload', method='POST')
@@ -139,7 +150,7 @@ def static_css(filename):
 
 @app.error(404)
 def error404(e):
-    return 'Nothing here,sorry'
+    return 'Nothing here,sorry:\n' + e.body
 
 # @app.error(500)
 # def error500():
