@@ -106,6 +106,14 @@ def reg(name):
     return name
 
 
+from utils.music import leech5sing
+
+
+@app.route('/m/<category>/<songID:int>')
+def leechMusic(category, songID):
+    mp3url = leech5sing(category, songID)
+    return static_file(filename=mp3url, download=True)
+
 # @app.route('/img/<filename:re:[a-z]+.jpg>')
 # @app.route('/img/<filename:re:.*\.png>#')
 @app.route('/p/<filename:re:%s>' % photo_regex)
