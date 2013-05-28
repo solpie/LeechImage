@@ -109,7 +109,7 @@ def reg(name):
 from utils.music import leech5sing
 
 
-@app.route('/m/<category>/<songID:int>')
+@app.route('/m/<category>/<songID:int>.mp3')
 def leechMusic(category, songID):
     mp3url = leech5sing(category, songID)
     return redirect(mp3url)
