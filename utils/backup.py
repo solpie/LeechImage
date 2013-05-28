@@ -1,6 +1,7 @@
 __author__ = 'SolPie'
 import os
 import zipfile
+import tempfile
 
 
 def zip_dir(dirname, zipfilename):
@@ -38,16 +39,26 @@ def zip_db_photos(uploads_path, db_path, zipfilename):
     return zipfilename
 
 
+def temp_zip():
+    with tempfile.SpooledTemporaryFile() as tmp:
+        with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as archive:
+            return archive
+                # with tempfile.SpooledTemporaryFile() as tmp:
+    #     with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as zf:
+
+
 def zip_path(root_path, zipfilename):
-    if os.path.isfile(zipfilename):
-        os.remove(zipfilename)
     filelist = []
     if os.path.isfile(root_path):
         filelist.append(root_path)
     else:
         for root, dirs, files in os.walk(root_path):
             for name in files:
-                filelist.append(os.path.join(root, name))
+                file_path = os.path.join(root, name)
+                if file_path == zipfilename:
+                    continue
+                filelist.append(file_path)
+
     zf = zipfile.ZipFile(zipfilename, "w", zipfile.zlib.DEFLATED)
     for tar in filelist:
         zf.write(tar, tar)

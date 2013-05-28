@@ -74,7 +74,7 @@ def download(backup):
         filename = zip_db_photos(UPLOAD_FOLDER, DB_PATH, 'dl/backup.zip')
         return static_file(filename=filename, root='.', download=True)
     if backup == 'all':
-        filename = zip_path('.', 'dl/backup2.zip')
+        filename = zip_path('.', 'dl/backup.zip')
         return static_file(filename=filename, root='.', download=True)
         # return static_file('shelve.db', root='db', download=True)
     return ''
